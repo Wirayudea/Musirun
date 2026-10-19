@@ -80,12 +80,11 @@ Repository ini menyertakan konfigurasi Vercel menggunakan runtime PHP komunitas 
 
 Sebelum deploy, siapkan database MySQL atau PostgreSQL yang dapat diakses dari Vercel dan bucket object storage S3-compatible untuk bukti pembayaran. SQLite dan penyimpanan lokal tidak persisten di Vercel Functions.
 
-Runtime PHP komunitas menggunakan konfigurasi `api/php.ini` untuk tidak menampilkan peringatan deprecation ke browser; error tetap dicatat di log. Konfigurasi aplikasi juga memakai konstanta SSL MySQL yang sesuai dengan versi PHP, termasuk PHP 8.5.
+Entry point Vercel menyembunyikan peringatan deprecation dari respons browser tanpa mengganti `php.ini` runtime, sehingga ekstensi PHP bawaan tetap dimuat. Cache bootstrap dan Blade diarahkan ke direktori sementara yang dapat ditulis, dan log menggunakan `stderr`. Konfigurasi aplikasi juga memakai konstanta SSL MySQL yang sesuai dengan versi PHP, termasuk PHP 8.5.
 
 Tambahkan environment variables berikut di **Vercel > Project > Settings > Environment Variables**:
 
 - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` dengan URL deployment, dan `APP_KEY` dari `php artisan key:generate --show`.
-- `VIEW_COMPILED_PATH=/tmp/laravel-views` agar Laravel dapat mengompilasi Blade pada filesystem Vercel yang read-only.
 - `DB_CONNECTION` (`mysql` atau `pgsql`), `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD`.
 - `PUBLIC_DISK_DRIVER=s3`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, `AWS_BUCKET`, dan `PUBLIC_DISK_URL` yang menunjuk ke URL publik bucket/CDN. Untuk penyedia S3-compatible, atur juga `AWS_ENDPOINT`; atur `AWS_USE_PATH_STYLE_ENDPOINT=true` hanya bila penyedia mewajibkannya. Bucket perlu mengizinkan pembacaan publik karena bukti pembayaran ditampilkan melalui URL file.
 - `ADMIN_EMAIL` dan `ADMIN_PASSWORD` dengan kredensial admin yang kuat sebelum menjalankan seeder.
