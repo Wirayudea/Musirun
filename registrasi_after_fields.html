@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Registrasi Musi Run 2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { background:#fff; color:#111; font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; padding:28px 0; }
+    .form-container{ max-width:980px; margin:auto; background:#fff; padding:28px; border-radius:12px; box-shadow:0 8px 24px rgba(2,6,23,0.08); border:1px solid #eef2f6 }
+    .jarak-card{ display:block; border:1px solid #e9ecef; padding:12px; border-radius:8px; cursor:pointer }
+    .jarak-card.disabled-card{ opacity:.5; cursor:not-allowed }
+    .jarak-card.active{ border-color:#0d6efd; box-shadow:0 2px 12px rgba(13,110,253,0.08) }
+    .progress{ height:6px }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2 class="mb-1">Form Registrasi Musi Run 2025</h2>
+    <p class="text-muted">Isi data peserta, pilih metode pembayaran, lalu konfirmasi.</p>
+
+    <small>Langkah <span id="currentStep">1</span> dari 3 — <span id="stepLabel">Isi Data Diri</span></small>
+    <div class="progress my-2"><div id="progressBar" class="progress-bar bg-primary" style="width:33%"></div></div>
+
+    <form id="registrasiForm" method="POST" action="http://127.0.0.1:8000/registrasi" enctype="multipart/form-data">
+      <input type="hidden" name="_token" value="zMYrxfWFfFPdqCBQfBoWr8WF1okHBYLiWcJx7E7l" autocomplete="off">
+      <!-- STEP 1 -->
+      <div id="step-1" class="step">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+            <input id="name" name="name" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">NIK <span class="text-danger">*</span></label>
+            <input id="nik" name="nik" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email <span class="text-danger">*</span></label>
+            <input id="email" name="email" type="email" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Tanggal Lahir <span class="text-danger">*</span></label>
+            <input id="dob" name="dob" type="date" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">No. WhatsApp <span class="text-danger">*</span></label>
+            <input id="whatsapp" name="whatsapp" class="form-control" placeholder="+62" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Ukuran Jersey <span class="text-danger">*</span></label>
+            <select id="jersey_size" name="jersey_size" class="form-select" required>
+              <option value="">Pilih Ukuran</option>
+              <option>XS</option><option>S</option><option>M</option><option>L</option>
+              <option>XL</option><option>XXL</option><option>3XL</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="gender_m" value="Laki-laki" checked>
+                <label class="form-check-label" for="gender_m">Laki-laki</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="gender_f" value="Perempuan">
+                <label class="form-check-label" for="gender_f">Perempuan</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Kategori <span class="text-danger">*</span></label>
+            <select name="kategori" id="kategori" class="form-select">
+              <option value="umum">Umum</option>
+              <option value="pelajar">Pelajar</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Jenis Identitas</label>
+            <select name="id_type" id="id_type" class="form-select">
+              <option value="KTP">KTP</option>
+              <option value="KK">Kartu Keluarga</option>
+              <option value="SIM">SIM</option>
+              <option value="KIA">KIA</option>
+              <option value="Kartu Pelajar">Kartu Pelajar</option>
+              <option value="Passport">Passport</option>
+              <option value="KITAS">KITAS</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Golongan Darah</label>
+            <select name="blood_type" id="blood_type" class="form-select">
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="None">None</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Kewarganegaraan</label>
+            <input type="text" name="kewarganegaraan" id="kewarganegaraan" class="form-control" value="Indonesia">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Negara</label>
+            <input type="text" name="negara" id="negara" class="form-control" value="Indonesia">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Provinsi</label>
+            <input type="text" name="provinsi" id="provinsi" class="form-control">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Kota / Kabupaten</label>
+            <input type="text" name="kota" id="kota" class="form-control">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Alamat Lengkap</label>
+            <textarea name="alamat" id="alamat" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Nomor Kontak Darurat <span class="text-danger">*</span></label>
+            <input type="tel" name="emergency_phone" id="emergency_phone" class="form-control" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Nama Kontak Darurat <span class="text-danger">*</span></label>
+            <input type="text" name="emergency_name" id="emergency_name" class="form-control" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Hubungan dengan Kontak Darurat</label>
+            <input type="text" name="emergency_relation" id="emergency_relation" class="form-control">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Nama Komunitas <small class="text-muted">(opsional)</small></label>
+            <input type="text" name="community" id="community" class="form-control">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Riwayat Penyakit Khusus (opsional)</label>
+            <textarea name="medical_history" id="medical_history" class="form-control" rows="3"></textarea>
+          </div>
+
+          <div class="col-12">
+            <h5>Kategori Jarak</h5>
+            <div class="row g-3" id="kategoriJarakContainer"></div>
+          </div>
+
+          <div class="col-12 d-flex justify-content-end mt-3">
+            <button type="button" class="btn btn-primary" onclick="nextStep(1)">Lanjutkan ke Pembayaran</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div id="step-2" class="step" style="display:none;">
+        <div class="row g-3">
+          <div class="col-12">
+            <h5>Pilih Metode Pembayaran</h5>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="payment_method" id="pm_va" value="va" checked>
+              <label class="form-check-label" for="pm_va">Virtual Account</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="payment_method" id="pm_qr" value="qr">
+              <label class="form-check-label" for="pm_qr">QR Code</label>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border p-3">
+              <strong>Ringkasan Pesanan</strong>
+              <div id="orderSummary" class="mt-2 text-muted">- Belum ada pilihan jarak</div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border p-3">
+              <strong>Detail Pembayaran</strong>
+              <div id="paymentDetails" class="mt-2 text-muted">Pilih metode pembayaran untuk melihat detail.</div>
+            </div>
+          </div>
+
+          <div class="col-12 d-flex justify-content-between mt-3">
+            <button type="button" class="btn btn-outline-secondary" onclick="prevStep()">Kembali</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Lihat Ringkasan & Konfirmasi</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div id="step-3" class="step" style="display:none;">
+        <div class="row g-3">
+          <div class="col-12">
+            <h5>Konfirmasi & Pembayaran</h5>
+            <div id="reviewArea" class="border p-3 text-muted">Menunggu ringkasan...</div>
+          </div>
+
+          <div class="col-12 d-flex justify-content-between align-items-center mt-3">
+            <button type="button" class="btn btn-outline-secondary" onclick="prevStep()">Kembali</button>
+            <div>
+              <button type="button" class="btn btn-success me-2" id="btnBayarSekarang" onclick="payNow()">Bayar Sekarang</button>
+              <button type="submit" class="btn btn-primary" id="btnSubmitForm" style="display:none;">Simpan & Kirim Pendaftaran</button>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div id="paymentResult" style="display:none; margin-top:12px;">
+              <h6>Order ID: <span id="orderIdText"></span></h6>
+              <div id="qrContainer" style="margin-top:10px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+  const kategoriJarak = [
+    { nama: '5 Kilometer', earlyBird:{start:'2026-06-01',end:'2026-12-09',hargaNormal:200000,hargaDiskon:170000}, normal:{start:'2025-12-10',end:'2026-01-10',hargaNormal:200000} },
+    { nama: '10 Kilometer', earlyBird:{start:'2025-10-01',end:'2025-12-09',hargaNormal:230000,hargaDiskon:210000}, normal:{start:'2025-12-10',end:'2026-01-10',hargaNormal:230000} }
+  ];
+
+  (function renderKategori(){
+    const container = document.getElementById('kategoriJarakContainer');
+    const today = new Date();
+    kategoriJarak.forEach(k=>{
+      const earlyStart=new Date(k.earlyBird.start), earlyEnd=new Date(k.earlyBird.end);
+      const normalStart=new Date(k.normal.start), normalEnd=new Date(k.normal.end);
+      const isEarly = today>=earlyStart && today<=earlyEnd;
+      const isNormal = today>=normalStart && today<=normalEnd;
+      const earlyHtml = `<div class="col-md-6"><label class="jarak-card ${!isEarly?'disabled-card':''}"><input type="radio" name="kategori_jarak" value="${k.nama}_Early" ${!isEarly?'disabled':''}> <div class="jarak-content"><strong>${k.nama} Early Bird</strong><div class="text-muted">${isEarly?('Diskon '+(k.earlyBird.hargaDiskon).toLocaleString()):''}</div></div></label></div>`;
+      const normalHtml = `<div class="col-md-6"><label class="jarak-card ${!isNormal?'disabled-card':''}"><input type="radio" name="kategori_jarak" value="${k.nama}_Normal" ${!isNormal?'disabled':''}> <div class="jarak-content"><strong>${k.nama} Normal</strong><div class="text-muted">Rp ${(k.normal.hargaNormal).toLocaleString()}</div></div></label></div>`;
+      container.insertAdjacentHTML('beforeend', earlyHtml+normalHtml);
+    });
+    document.addEventListener('click', e=>{
+      const card = e.target.closest('.jarak-card');
+      if(!card || card.classList.contains('disabled-card')) return;
+      document.querySelectorAll('.jarak-card').forEach(c=>c.classList.remove('active'));
+      card.classList.add('active');
+      const input = card.querySelector('input[type="radio"]'); if(input) input.checked=true;
+    });
+  })();
+
+  let current = 1;
+  function updateProgress(){ document.getElementById('currentStep').textContent=current; document.getElementById('progressBar').style.width=(current/3*100)+'%'; const labels=['Isi Data Diri','Pembayaran','Konfirmasi']; document.getElementById('stepLabel').textContent=labels[current-1]; }
+  function showStep(n){ for(let i=1;i<=3;i++){ const el=document.getElementById('step-'+i); if(el) el.style.display=(i===n)?'':'none'; } }
+  function nextStep(from){ if(from===1){ const required=['name','nik','email','dob','whatsapp','jersey_size']; for(let id of required){ const el=document.getElementById(id); if(!el||!el.value){ el&&el.focus(); alert('Lengkapi semua data diri terlebih dahulu.'); return; } } const kategori=document.querySelector('input[name="kategori_jarak"]:checked'); if(!kategori){ alert('Pilih kategori jarak.'); return; } }
+    if(current<3) current++; showStep(current); updateProgress(); if(current===2) populateOrderSummary(); if(current===3) populateReview(); }
+  function prevStep(){ if(current>1) current--; showStep(current); updateProgress(); }
+
+  function getSelectedCategory(){ const sel=document.querySelector('input[name="kategori_jarak"]:checked'); return sel?sel.value:null; }
+  function formatRupiah(n){ return 'Rp '+Number(n).toLocaleString('id-ID'); }
+  function populateOrderSummary(){ const sel=getSelectedCategory(); const el=document.getElementById('orderSummary'); if(!sel){ el.innerHTML='- Belum ada pilihan jarak'; return; } const parts=sel.split('_'); const nama=parts[0], tipe=parts[1]; let price=0; for(let k of kategoriJarak){ if(k.nama===nama){ price=(tipe==='Early') ? (k.earlyBird.hargaDiskon||k.earlyBird.hargaNormal) : k.normal.hargaNormal; } } el.innerHTML=`<div>${nama} — <strong>${tipe}</strong></div><div class="mt-2">Total: <strong>${formatRupiah(price)}</strong></div>`; }
+
+  function populatePaymentDetails(){ const method=(document.querySelector('input[name="payment_method"]:checked')||{}).value||'va'; const details=document.getElementById('paymentDetails'); details.innerHTML = method==='va' ? 'Virtual Account: nomor VA muncul setelah klik Bayar Sekarang.' : 'QR Payment: QR akan muncul setelah klik Bayar Sekarang.'; }
+  document.addEventListener('change', e=>{ if(e.target && e.target.name==='payment_method') populatePaymentDetails(); });
+
+  function populateReview(){ const review=document.getElementById('reviewArea'); const name=document.getElementById('name').value; const email=document.getElementById('email').value; const phone=document.getElementById('whatsapp').value; const method=(document.querySelector('input[name="payment_method"]:checked')||{}).value||'va'; const methodLabel = method==='va'?'Virtual Account':'QR Code'; let priceText = document.getElementById('orderSummary').innerHTML; review.innerHTML=`<p><strong>Nama:</strong> ${name}<br><strong>Email:</strong> ${email}<br><strong>HP:</strong> ${phone}</p><p><strong>Metode Pembayaran:</strong> ${methodLabel}</p><div><strong>Ringkasan:</strong><br>${priceText}</div>`; }
+
+  function createOrderId(){ return 'ORD'+Date.now(); }
+  function payNow(){ const orderId=createOrderId(); document.getElementById('orderIdText').textContent=orderId; const method=(document.querySelector('input[name="payment_method"]:checked')||{}).value||'va'; const payload=`${orderId}|method:${method}|summary:${document.getElementById('orderSummary').textContent.trim()}`; const qrUrl='https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl='+encodeURIComponent(payload); document.getElementById('qrContainer').innerHTML=`<img src="${qrUrl}" alt="QR Pembayaran">`; document.getElementById('paymentResult').style.display=''; document.getElementById('btnSubmitForm').style.display=''; document.getElementById('btnBayarSekarang').style.display='none'; document.getElementById('paymentResult').scrollIntoView({behavior:'smooth'}); }
+
+  // init
+  updateProgress(); populatePaymentDetails(); showStep(1);
+
+  // final submit validation
+  document.getElementById('registrasiForm').addEventListener('submit', function(e){ const sel=getSelectedCategory(); if(!sel){ e.preventDefault(); alert('Silahkan pilih kategori jarak terlebih dahulu'); document.getElementById('kategoriJarakContainer').scrollIntoView({behavior:'smooth'}); } });
+  </script>
+</body>
+</html>
