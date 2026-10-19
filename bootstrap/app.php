@@ -19,5 +19,19 @@ return Application::configure(basePath: dirname(__DIR__))
         );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->report(function (\Throwable $exception): void {
+            $request = request();
+
+            if (! $request->isMethod('post') || ! $request->is('admin/login')) {
+                return;
+            }
+
+            error_log(sprintf(
+                'Admin login diagnostic: exception=%s code=%s file=%s line=%d',
+                get_debug_type($exception),
+                (string) $exception->getCode(),
+                basename($exception->getFile()),
+                $exception->getLine(),
+            ));
+        });
     })->create();
