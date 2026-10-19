@@ -80,6 +80,8 @@ Repository ini menyertakan konfigurasi Vercel menggunakan runtime PHP komunitas 
 
 Sebelum deploy, siapkan database MySQL atau PostgreSQL yang dapat diakses dari Vercel dan bucket object storage S3-compatible untuk bukti pembayaran. SQLite dan penyimpanan lokal tidak persisten di Vercel Functions.
 
+Runtime PHP komunitas menggunakan konfigurasi `api/php.ini` untuk tidak menampilkan peringatan deprecation ke browser; error tetap dicatat di log. Konfigurasi aplikasi juga memakai konstanta SSL MySQL yang sesuai dengan versi PHP, termasuk PHP 8.5.
+
 Tambahkan environment variables berikut di **Vercel > Project > Settings > Environment Variables**:
 
 - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` dengan URL deployment, dan `APP_KEY` dari `php artisan key:generate --show`.
