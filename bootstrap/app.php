@@ -26,10 +26,19 @@ return Application::configure(basePath: dirname(__DIR__))
                 return;
             }
 
+            $sqlState = $exception instanceof \Illuminate\Database\QueryException
+                ? $exception->getPrevious()?->getCode()
+                : null;
+            $connection = $exception instanceof \Illuminate\Database\QueryException
+                ? $exception->getConnectionName()
+                : null;
+
             error_log(sprintf(
-                'Admin login diagnostic: exception=%s code=%s file=%s line=%d',
+                'Admin login diagnostic: exception=%s code=%s sqlstate=%s connection=%s file=%s line=%d',
                 get_debug_type($exception),
                 (string) $exception->getCode(),
+                (string) ($sqlState ?? 'none'),
+                (string) ($connection ?? 'none'),
                 basename($exception->getFile()),
                 $exception->getLine(),
             ));
