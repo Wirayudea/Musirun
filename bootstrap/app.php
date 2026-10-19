@@ -26,18 +26,22 @@ return Application::configure(basePath: dirname(__DIR__))
                 return;
             }
 
-            $sqlState = $exception instanceof \Illuminate\Database\QueryException
-                ? $exception->getPrevious()?->getCode()
+            $previous = $exception->getPrevious();
+            $pdoErrorInfo = $previous instanceof \PDOException ? $previous->errorInfo : null;
+            $sqlState = is_array($pdoErrorInfo)
+                ? ($pdoErrorInfo[0] ?? $previous->getCode())
                 : null;
+            $driverCode = is_array($pdoErrorInfo) ? ($pdoErrorInfo[1] ?? 'none') : 'none';
             $connection = $exception instanceof \Illuminate\Database\QueryException
                 ? $exception->getConnectionName()
                 : null;
 
             error_log(sprintf(
-                'Admin login diagnostic: exception=%s code=%s sqlstate=%s connection=%s file=%s line=%d',
+                'Admin login diagnostic: exception=%s code=%s sqlstate=%s driver_code=%s connection=%s file=%s line=%d',
                 get_debug_type($exception),
                 (string) $exception->getCode(),
                 (string) ($sqlState ?? 'none'),
+                (string) $driverCode,
                 (string) ($connection ?? 'none'),
                 basename($exception->getFile()),
                 $exception->getLine(),
