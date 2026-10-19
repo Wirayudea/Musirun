@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AdminAuthController extends Controller
 {
@@ -21,7 +20,17 @@ class AdminAuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
+        try {
+            $authenticated = Auth::attempt($credentials, $request->filled('remember'));
+        } catch (QueryException $exception) {
+            report($exception);
+
+            return back()
+                ->withErrors(['email' => 'Layanan login sedang tidak dapat terhubung ke database. Silakan coba lagi beberapa saat.'])
+                ->onlyInput('email');
+        }
+
+        if ($authenticated) {
             $request->session()->regenerate();
 
             // Ensure user is admin

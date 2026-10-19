@@ -28,11 +28,12 @@ return Application::configure(basePath: dirname(__DIR__))
 
             $previous = $exception->getPrevious();
             $pdoErrorInfo = $previous instanceof \PDOException ? $previous->errorInfo : null;
+            $driverMessage = is_array($pdoErrorInfo) ? ($pdoErrorInfo[2] ?? '') : '';
             $sqlState = is_array($pdoErrorInfo)
                 ? ($pdoErrorInfo[0] ?? $previous->getCode())
                 : null;
             $driverCode = is_array($pdoErrorInfo) ? ($pdoErrorInfo[1] ?? 'none') : 'none';
-            $previousMessage = strtolower($previous?->getMessage() ?? '');
+            $previousMessage = strtolower(($previous?->getMessage() ?? '').' '.$driverMessage);
             $failureCategory = match (true) {
                 str_contains($previousMessage, 'password authentication failed') => 'database_authentication_rejected',
                 str_contains($previousMessage, 'no pg_hba.conf entry') => 'database_access_rule_rejected',
