@@ -72,7 +72,7 @@
                     @if($registrant->status !== 'rejected')<form action="{{ route('admin.registrant.status', $registrant) }}" method="POST">@csrf @method('PATCH')<input type="hidden" name="status" value="rejected"><button class="btn btn-outline-danger" type="submit"><i class="bi bi-x-circle me-1"></i>Tolak</button></form>@endif
                 </div>
             </section>
-            <section class="panel"><h2><i class="bi bi-receipt me-2"></i>Bukti Pembayaran</h2>@if($registrant->payment_proof_path)<img class="proof" src="{{ Storage::url($registrant->payment_proof_path) }}" alt="Bukti pembayaran {{ $registrant->name }}"><a href="{{ Storage::url($registrant->payment_proof_path) }}" target="_blank" class="btn btn-outline-primary w-100 mt-3"><i class="bi bi-box-arrow-up-right me-1"></i>Buka Bukti Pembayaran</a>@else<div class="empty-proof"><i class="bi bi-image fs-2 d-block mb-2"></i>Bukti pembayaran belum diunggah.</div>@endif</section>
+            <section class="panel"><h2><i class="bi bi-receipt me-2"></i>Bukti Pembayaran</h2>@if($registrant->payment_proof_path)<img class="proof" src="{{ Storage::disk('public')->url($registrant->payment_proof_path) }}" alt="Bukti pembayaran {{ $registrant->name }}"><a href="{{ Storage::disk('public')->url($registrant->payment_proof_path) }}" target="_blank" class="btn btn-outline-primary w-100 mt-3"><i class="bi bi-box-arrow-up-right me-1"></i>Buka Bukti Pembayaran</a>@else<div class="empty-proof"><i class="bi bi-image fs-2 d-block mb-2"></i>Bukti pembayaran belum diunggah.</div>@endif</section>
         </div>
     </main>
 </div>

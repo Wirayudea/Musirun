@@ -39,10 +39,20 @@ return [
         ],
 
         'public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'driver' => env('PUBLIC_DISK_DRIVER', 'local'),
+            'root' => env(
+                'PUBLIC_DISK_ROOT',
+                env('PUBLIC_DISK_DRIVER') === 's3' ? '' : storage_path('app/public')
+            ),
+            'url' => env('PUBLIC_DISK_URL')
+                ?: (env('AWS_URL') ?: env('APP_URL').'/storage'),
             'visibility' => 'public',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'bucket' => env('AWS_BUCKET'),
+            'endpoint' => env('AWS_ENDPOINT') ?: null,
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
         ],

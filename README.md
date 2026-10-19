@@ -73,3 +73,28 @@ Tes notifikasi menggunakan HTTP fake dan tidak mengirim pesan sungguhan ke Fonnt
 - Admin meninjau bukti pembayaran dan mengubah status pendaftaran melalui halaman peserta.
 - Notifikasi status dikirim ketika admin mengubah pendaftaran menjadi disetujui atau ditolak. Status tetap disimpan bila pengiriman notifikasi gagal; kegagalan dicatat di log aplikasi dan ditampilkan sebagai peringatan.
 - Jalankan migrasi terbaru setiap kali memperbarui aplikasi. Jangan bagikan file `.env` karena berisi kredensial dan token.
+
+## Deploy ke Vercel
+
+Repository ini menyertakan konfigurasi Vercel menggunakan runtime PHP komunitas `vercel-php`, Composer untuk dependensi Laravel, dan Vite untuk aset frontend. Hubungkan repository GitHub ke Vercel dengan root directory proyek ini; konfigurasi build dan rewrite sudah ada di `vercel.json`.
+
+Sebelum deploy, siapkan database MySQL atau PostgreSQL yang dapat diakses dari Vercel dan bucket object storage S3-compatible untuk bukti pembayaran. SQLite dan penyimpanan lokal tidak persisten di Vercel Functions.
+
+Tambahkan environment variables berikut di **Vercel > Project > Settings > Environment Variables**:
+
+- `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` dengan URL deployment, dan `APP_KEY` dari `php artisan key:generate --show`.
+- `VIEW_COMPILED_PATH=/tmp/laravel-views` agar Laravel dapat mengompilasi Blade pada filesystem Vercel yang read-only.
+- `DB_CONNECTION` (`mysql` atau `pgsql`), `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD`.
+- `PUBLIC_DISK_DRIVER=s3`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, `AWS_BUCKET`, dan `PUBLIC_DISK_URL` yang menunjuk ke URL publik bucket/CDN. Untuk penyedia S3-compatible, atur juga `AWS_ENDPOINT`; atur `AWS_USE_PATH_STYLE_ENDPOINT=true` hanya bila penyedia mewajibkannya. Bucket perlu mengizinkan pembacaan publik karena bukti pembayaran ditampilkan melalui URL file.
+- `ADMIN_EMAIL` dan `ADMIN_PASSWORD` dengan kredensial admin yang kuat sebelum menjalankan seeder.
+- SMTP (`MAIL_MAILER=smtp` beserta variabel `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`, dan `MAIL_FROM_NAME`) untuk pengiriman email. Atur `FONNTE_TOKEN` bila notifikasi WhatsApp digunakan.
+
+Set `SESSION_DRIVER=database`, `CACHE_STORE=database`, `QUEUE_CONNECTION=sync`, dan `LOG_CHANNEL=stderr`. Migrasi database harus dijalankan secara terpisah, bukan pada setiap function request. Setelah menghubungkan environment production melalui Vercel CLI, jalankan:
+
+```sh
+vercel env pull .env.production
+php artisan migrate --env=production --force
+php artisan db:seed --class=AdminUserSeeder --env=production --force
+```
+
+Pastikan `ADMIN_EMAIL` dan `ADMIN_PASSWORD` tersedia pada environment production sebelum menjalankan seeder. Jangan jalankan seeder admin dengan nilai bawaan. Setiap upload bukti bayar menggunakan object storage ketika `PUBLIC_DISK_DRIVER=s3`; untuk pengembangan lokal, disk tetap menggunakan filesystem lokal.
