@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->report(function (\Throwable $exception): void {
+        $exceptions->report(function (\Throwable $exception) {
             $request = request();
 
             if (! $request->isMethod('post') || ! $request->is('admin/login')) {
@@ -33,5 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 basename($exception->getFile()),
                 $exception->getLine(),
             ));
+
+            return false;
         });
     })->create();
